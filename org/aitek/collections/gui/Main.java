@@ -59,22 +59,22 @@ public class Main extends JFrame implements ActionListener, ChangeListener {
 		tabbedPane.addTab("    List    ", null, listPanel, "List Performances");
 		listSample = new ListSample(listPanel, this);
 
-		StatsPanel setPanel = new StatsPanel("Set", new String[] { " CopyOnWriteArraySet", "LinkedHashSet", "TreeSet" });
+		StatsPanel setPanel = new StatsPanel("Set", new String[] { " CopyOnWriteArraySet", "concurrentSkipListSet", "TreeSet" });
 		SpringLayout slSet = new SpringLayout();
 		setPanel.setLayout(slSet);
 		tabbedPane.addTab("    Set    ", null, setPanel, "Set Performances");
 		setSample = new SetSample(setPanel, this);
 
-		StatsPanel mapPanel = new StatsPanel("Map", new String[] { "Hashtable", "HashMap", "LinkedHashMap", "TreeMap" });
+		StatsPanel mapPanel = new StatsPanel("Map", new String[] { "Hashtable", "IdentityHashMap", "WeakHashMap", "TreeMap" });
 		SpringLayout slMap = new SpringLayout();
 		mapPanel.setLayout(slMap);
 		tabbedPane.addTab("    Map    ", null, mapPanel, "Map Performances");
 		mapSample = new MapSample(mapPanel, this);
 
-		JPanel jpJRE = new JREInfoPanel();
-		SpringLayout slJRE = new SpringLayout();
-		jpJRE.setLayout(slJRE);
-		tabbedPane.addTab("  JRE Info  ", null, jpJRE, "Information about Java Virtual Machine");
+		//JPanel jpJRE = new JREInfoPanel();
+		//SpringLayout slJRE = new SpringLayout();
+		//jpJRE.setLayout(slJRE);
+		//tabbedPane.addTab("  JRE Info  ", null, jpJRE, "Information about Java Virtual Machine");
 
 		jbPopulate = new JButton("Populate");
 		add(jbPopulate);
@@ -200,48 +200,55 @@ public class Main extends JFrame implements ActionListener, ChangeListener {
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
-
-		if (e.getSource() instanceof JSlider) {
-
-			JSlider slider = (JSlider) e.getSource();
-			if (slider.getName().equals("size")) {
-				collectionSample.setListSize(slider.getValue() * 1000);
-				String value = collectionSample.getNumberFormat().format(slider.getValue() * 1000);
-				sizeLabel.setText("Collection Size: " + value);
-			}
-		}
-		else {
-
-			JTabbedPane pane = (JTabbedPane) e.getSource();
-
-			int k = pane.getSelectedIndex();
-			switch (k) {
-				case 0:
-					collectionSample = listSample;
-				break;
-				case 1:
-					collectionSample = setSample;
-				break;
-				case 2:
-					collectionSample = mapSample;
-				break;
-
+		SwingWorker<Void,Void> changeState = new SwingWorker<Void,Void>() {
+			@Override
+			protected Void doInBackground() {
+				return null;
 			}
 
-			if (sizeSlider != null) {
+			protected void done() {
 
-				sizeSlider.setValue(Constants.COLLECTION_MIN_SIZE);
-				collectionSample.setListSize(Constants.COLLECTION_MIN_SIZE * 1000);
-				sizeSlider.invalidate();
-				sizeSlider.repaint();
+				if (e.getSource() instanceof JSlider) {
 
-				jbPopulate.setEnabled(collectionSample.getSupportedOperations().contains(OperationType.POPULATE));
-				setButtonsState();
-				repaint();
+					JSlider slider = (JSlider) e.getSource();
+					if (slider.getName().equals("size")) {
+						collectionSample.setListSize(slider.getValue() * 1000);
+						String value = collectionSample.getNumberFormat().format(slider.getValue() * 1000);
+						sizeLabel.setText("Collection Size: " + value);
+					}
+				} else {
+
+					JTabbedPane pane = (JTabbedPane) e.getSource();
+
+					int k = pane.getSelectedIndex();
+					switch (k) {
+						case 0:
+							collectionSample = listSample;
+							break;
+						case 1:
+							collectionSample = setSample;
+							break;
+						case 2:
+							collectionSample = mapSample;
+							break;
+
+					}
+
+					if (sizeSlider != null) {
+
+						sizeSlider.setValue(Constants.COLLECTION_MIN_SIZE);
+						collectionSample.setListSize(Constants.COLLECTION_MIN_SIZE * 1000);
+						sizeSlider.invalidate();
+						sizeSlider.repaint();
+
+						jbPopulate.setEnabled(collectionSample.getSupportedOperations().contains(OperationType.POPULATE));
+						setButtonsState();
+						repaint();
+					}
+				}
 			}
-
-		}
-
+		};
+		changeState.execute();
 	}
 
 	public void setButtonsState() {

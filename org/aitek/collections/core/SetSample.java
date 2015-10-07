@@ -3,6 +3,7 @@ package org.aitek.collections.core;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.*;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import javax.swing.SwingWorker;
@@ -14,7 +15,7 @@ public class SetSample extends CollectionSample implements PropertyChangeListene
 
 	//private HashSet<Integer> copyOnWriteArraySet;
 	private CopyOnWriteArraySet<Integer> copyOnWriteArraySet;
-	private LinkedHashSet<Integer> linkedHashSet;
+	private ConcurrentSkipListSet<Integer> concurrentSkipListSet;
 	private TreeSet<Integer> treeSet;
 	private Task task;
 
@@ -24,7 +25,7 @@ public class SetSample extends CollectionSample implements PropertyChangeListene
 		COLLECTION_TYPES = 3;
 		times = new long[COLLECTION_TYPES];
 		copyOnWriteArraySet = new CopyOnWriteArraySet<Integer>();
-		linkedHashSet = new LinkedHashSet<Integer>();
+		concurrentSkipListSet = new ConcurrentSkipListSet<Integer>();
 		treeSet = new TreeSet<Integer>();
 	}
 
@@ -101,7 +102,7 @@ public class SetSample extends CollectionSample implements PropertyChangeListene
 			for (int z = 0; z <= iterations; z++) {
 
 				copyOnWriteArraySet.clear();
-				linkedHashSet.clear();
+				concurrentSkipListSet.clear();
 				treeSet.clear();
 
 				int toBeInserted[] = new int[listSize];
@@ -117,7 +118,7 @@ public class SetSample extends CollectionSample implements PropertyChangeListene
 
 				startingTime = System.nanoTime();
 				for (int j = 0; j < getListSize(); j++) {
-					linkedHashSet.add(toBeInserted[j]);
+					concurrentSkipListSet.add(toBeInserted[j]);
 				}
 				times[1] += System.nanoTime() - startingTime;
 
@@ -151,7 +152,7 @@ public class SetSample extends CollectionSample implements PropertyChangeListene
 
 				startingTime = System.nanoTime();
 				for (int j = 0; j < 50; j++)
-					linkedHashSet.add(toBeInserted);
+					concurrentSkipListSet.add(toBeInserted);
 				times[1] += System.nanoTime() - startingTime;
 
 				startingTime = System.nanoTime();
@@ -185,7 +186,7 @@ public class SetSample extends CollectionSample implements PropertyChangeListene
 
 				startingTime = System.nanoTime();
 				for (int j = 0; j < 50; j++)
-					linkedHashSet.remove(toBeRemoved);
+					concurrentSkipListSet.remove(toBeRemoved);
 				times[1] += System.nanoTime() - startingTime;
 
 				startingTime = System.nanoTime();
@@ -218,7 +219,7 @@ public class SetSample extends CollectionSample implements PropertyChangeListene
 				times[0] += System.nanoTime() - startingTime;
 
 				startingTime = System.nanoTime();
-				iterator = linkedHashSet.iterator();
+				iterator = concurrentSkipListSet.iterator();
 				while (iterator.hasNext()) {
 					iterator.next();
 				}
