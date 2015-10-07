@@ -164,7 +164,7 @@ public class ListSample extends CollectionSample implements PropertyChangeListen
 			times[3] += System.nanoTime() - startingTime;
 
 			return times;
-		}
+		} // done
 
 		private long[] insertIntoLists() {
 
@@ -189,6 +189,11 @@ public class ListSample extends CollectionSample implements PropertyChangeListen
 					vector.add(vector.size() / 2, 0);
 				times[2] += System.nanoTime() - startingTime;
 
+				startingTime = System.nanoTime();
+				for (int j = 0; j < 50; j++)
+					stack.add(stack.size() / 2, 0);
+				times[3] += System.nanoTime() - startingTime;
+
 				setProgress((int) (z * mult));
 			}
 			for (int z = 0; z < COLLECTION_TYPES; z++) {
@@ -196,7 +201,7 @@ public class ListSample extends CollectionSample implements PropertyChangeListen
 			}
 
 			return times;
-		}
+		} // done
 
 		private long[] removeFromLists() {
 
@@ -233,6 +238,15 @@ public class ListSample extends CollectionSample implements PropertyChangeListen
 					vector.remove(vector.size()-1);
 				times[2] += System.nanoTime() - startingTime;
 
+				startingTime = System.nanoTime();
+				for (int j = 0; j < 10; j++)
+					stack.remove(0);
+				for (int j = 0; j < 10; j++)
+					stack.remove(stack.size() / 2);
+				for (int j = 0; j < 10; j++)
+					stack.remove(stack.size()-1);
+				times[3] += System.nanoTime() - startingTime;
+
 				setProgress((int) (z * mult));
 			}
 			for (int z = 0; z < COLLECTION_TYPES; z++) {
@@ -240,9 +254,9 @@ public class ListSample extends CollectionSample implements PropertyChangeListen
 			}
 			System.out.println(arrayList.size());
 			return times;
-		}
+		} // done
 
-		private long[] searchLists() {
+		private long[] searchLists() { //done
 
 			long[] times = new long[COLLECTION_TYPES];
 			main.setWorking("Searching elements in list...");
@@ -289,7 +303,7 @@ public class ListSample extends CollectionSample implements PropertyChangeListen
 			}
 
 			return times;
-		}
+		} //done
 
 		private long[] sortLists() { //done
 
@@ -324,7 +338,7 @@ public class ListSample extends CollectionSample implements PropertyChangeListen
 			}
 
 			return times;
-		}
+		} //done
 
 		private long[] iterateOnLists() { //done
 
@@ -372,7 +386,7 @@ public class ListSample extends CollectionSample implements PropertyChangeListen
 			setProgress(100);
 
 			return times;
-		}
+		} //done
 
 	}
 

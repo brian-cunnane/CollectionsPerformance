@@ -3,14 +3,7 @@ package org.aitek.collections.gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.JTabbedPane;
-import javax.swing.SpringLayout;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -41,6 +34,7 @@ public class Main extends JFrame implements ActionListener, ChangeListener {
 
 	public Main() throws Exception {
 
+
 		super("Java Collections Performance");
 
 		setSize(750, 400);
@@ -65,7 +59,7 @@ public class Main extends JFrame implements ActionListener, ChangeListener {
 		tabbedPane.addTab("    List    ", null, listPanel, "List Performances");
 		listSample = new ListSample(listPanel, this);
 
-		StatsPanel setPanel = new StatsPanel("Set", new String[] { "HashSet", "LinkedHashSet", "TreeSet" });
+		StatsPanel setPanel = new StatsPanel("Set", new String[] { " CopyOnWriteArraySet", "LinkedHashSet", "TreeSet" });
 		SpringLayout slSet = new SpringLayout();
 		setPanel.setLayout(slSet);
 		tabbedPane.addTab("    Set    ", null, setPanel, "Set Performances");
@@ -153,50 +147,55 @@ public class Main extends JFrame implements ActionListener, ChangeListener {
 	}
 
 	public static void main(String[] args) {
+		SwingUtilities.invokeLater(new Runnable(){
+			@Override
+			public void run(){
+				try {
 
-		try {
+					Main m = new Main();
+					m.setVisible(true);
+				}
+				catch (Exception e) {
+					SwingUtils.showFormError(e);
+				}
+			}
+		});
 
-			Main m = new Main();
-			m.setVisible(true);
-		}
-		catch (Exception e) {
-			SwingUtils.showFormError(e);
-		}
+
 
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		SwingWorker<Void,Void>buttonPress = new SwingWorker<Void,Void>() {
+			@Override
+			protected Void doInBackground() {
+				try {
 
-		try {
+					if (e.getActionCommand().equals("Quit")) {
+						System.exit(0);
+					} else if (e.getActionCommand().equals("Populate")) {
+						collectionSample.execute(OperationType.POPULATE);
+					} else if (e.getActionCommand().equals("Insert")) {
+						collectionSample.execute(OperationType.INSERT);
+					} else if (e.getActionCommand().equals("Remove")) {
+						collectionSample.execute(OperationType.REMOVE);
+					} else if (e.getActionCommand().equals("Search")) {
+						collectionSample.execute(OperationType.SEARCH);
+					} else if (e.getActionCommand().equals("Iterate")) {
+						collectionSample.execute(OperationType.ITERATE);
+					} else if (e.getActionCommand().equals("Sort")) {
+						collectionSample.execute(OperationType.SORT);
+					}
 
-			if (e.getActionCommand().equals("Quit")) {
-				System.exit(0);
+				} catch (Exception ex) {
+					SwingUtils.showFormError(ex);
+				}
+				return null;
 			}
-			else if (e.getActionCommand().equals("Populate")) {
-				collectionSample.execute(OperationType.POPULATE);
-			}
-			else if (e.getActionCommand().equals("Insert")) {
-				collectionSample.execute(OperationType.INSERT);
-			}
-			else if (e.getActionCommand().equals("Remove")) {
-				collectionSample.execute(OperationType.REMOVE);
-			}
-			else if (e.getActionCommand().equals("Search")) {
-				collectionSample.execute(OperationType.SEARCH);
-			}
-			else if (e.getActionCommand().equals("Iterate")) {
-				collectionSample.execute(OperationType.ITERATE);
-			}
-			else if (e.getActionCommand().equals("Sort")) {
-				collectionSample.execute(OperationType.SORT);
-			}
-
-		}
-		catch (Exception ex) {
-			SwingUtils.showFormError(ex);
-		}
-
+			protected void done(){}
+		};
+		buttonPress.execute();
 	}
 
 	@Override

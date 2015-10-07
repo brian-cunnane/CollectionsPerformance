@@ -2,10 +2,8 @@ package org.aitek.collections.core;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.TreeSet;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import javax.swing.SwingWorker;
 
@@ -14,7 +12,8 @@ import org.aitek.collections.gui.StatsPanel;
 
 public class SetSample extends CollectionSample implements PropertyChangeListener {
 
-	private HashSet<Integer> hashSet;
+	//private HashSet<Integer> copyOnWriteArraySet;
+	private CopyOnWriteArraySet<Integer> copyOnWriteArraySet;
 	private LinkedHashSet<Integer> linkedHashSet;
 	private TreeSet<Integer> treeSet;
 	private Task task;
@@ -24,7 +23,7 @@ public class SetSample extends CollectionSample implements PropertyChangeListene
 		super(statsPanel, main);
 		COLLECTION_TYPES = 3;
 		times = new long[COLLECTION_TYPES];
-		hashSet = new HashSet<Integer>();
+		copyOnWriteArraySet = new CopyOnWriteArraySet<Integer>();
 		linkedHashSet = new LinkedHashSet<Integer>();
 		treeSet = new TreeSet<Integer>();
 	}
@@ -101,7 +100,7 @@ public class SetSample extends CollectionSample implements PropertyChangeListene
 
 			for (int z = 0; z <= iterations; z++) {
 
-				hashSet.clear();
+				copyOnWriteArraySet.clear();
 				linkedHashSet.clear();
 				treeSet.clear();
 
@@ -112,7 +111,7 @@ public class SetSample extends CollectionSample implements PropertyChangeListene
 
 				long startingTime = System.nanoTime();
 				for (int j = 0; j < getListSize(); j++) {
-					hashSet.add(toBeInserted[j]);
+					copyOnWriteArraySet.add(toBeInserted[j]);
 				}
 				times[0] += System.nanoTime() - startingTime;
 
@@ -147,7 +146,7 @@ public class SetSample extends CollectionSample implements PropertyChangeListene
 				int toBeInserted = (int) (Math.random() * listSize);
 				long startingTime = System.nanoTime();
 				for (int j = 0; j < 50; j++)
-					hashSet.add(toBeInserted);
+					copyOnWriteArraySet.add(toBeInserted);
 				times[0] += System.nanoTime() - startingTime;
 
 				startingTime = System.nanoTime();
@@ -181,7 +180,7 @@ public class SetSample extends CollectionSample implements PropertyChangeListene
 
 				long startingTime = System.nanoTime();
 				for (int j = 0; j < 50; j++)
-					hashSet.remove(toBeRemoved);
+					copyOnWriteArraySet.remove(toBeRemoved);
 				times[0] += System.nanoTime() - startingTime;
 
 				startingTime = System.nanoTime();
@@ -212,7 +211,7 @@ public class SetSample extends CollectionSample implements PropertyChangeListene
 			for (int z = 0; z <= iterations; z++) {
 
 				long startingTime = System.nanoTime();
-				Iterator<Integer> iterator = hashSet.iterator();
+				Iterator<Integer> iterator = copyOnWriteArraySet.iterator();
 				while (iterator.hasNext()) {
 					iterator.next();
 				}
