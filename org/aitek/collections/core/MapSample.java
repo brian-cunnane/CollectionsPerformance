@@ -3,6 +3,7 @@ package org.aitek.collections.core;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.SwingWorker;
 
@@ -14,7 +15,7 @@ public class MapSample extends CollectionSample implements PropertyChangeListene
 	private Hashtable<Integer, Integer> hashtable;
 	private IdentityHashMap<Integer, Integer> identityHashMap;
 	private WeakHashMap<Integer, Integer> weakHashMap;
-	private TreeMap<Integer, Integer> treeMap;
+	private ConcurrentHashMap<Integer, Integer> concurrentHashMap;
 	private Task task;
 
 	public MapSample(StatsPanel statsPanel, Main main) {
@@ -25,7 +26,7 @@ public class MapSample extends CollectionSample implements PropertyChangeListene
 		hashtable = new Hashtable<Integer, Integer>();
 		identityHashMap = new IdentityHashMap<Integer, Integer>();
 		weakHashMap = new WeakHashMap<Integer, Integer>();
-		treeMap = new TreeMap<Integer, Integer>();
+		concurrentHashMap = new ConcurrentHashMap<Integer, Integer>();
 	}
 
 	public HashSet<OperationType> getSupportedOperations() {
@@ -102,7 +103,7 @@ public class MapSample extends CollectionSample implements PropertyChangeListene
 
 				identityHashMap.clear();
 				weakHashMap.clear();
-				treeMap.clear();
+				concurrentHashMap.clear();
 
 				int keys[] = new int[listSize];
 				int values[] = new int[listSize];
@@ -126,7 +127,7 @@ public class MapSample extends CollectionSample implements PropertyChangeListene
 
 				startingTime = System.nanoTime();
 				for (int j = 0; j < getListSize(); j++) {
-					treeMap.put(keys[j], values[j]);
+					concurrentHashMap.put(keys[j], values[j]);
 				}
 				times[2] += System.nanoTime() - startingTime;
 
@@ -170,7 +171,7 @@ public class MapSample extends CollectionSample implements PropertyChangeListene
 
 				startingTime = System.nanoTime();
 				for (int j = 0; j < 50; j++)
-					treeMap.remove(toBeRemoved[j]);
+					concurrentHashMap.remove(toBeRemoved[j]);
 				times[2] += System.nanoTime() - startingTime;
 
 				startingTime = System.nanoTime();
@@ -215,7 +216,7 @@ public class MapSample extends CollectionSample implements PropertyChangeListene
 
 				startingTime = System.nanoTime();
 				for (int j = 0; j < 50; j++)
-					treeMap.put(keys[j], values[j]);
+					concurrentHashMap.put(keys[j], values[j]);
 				times[2] += System.nanoTime() - startingTime;
 
 				startingTime = System.nanoTime();
@@ -255,7 +256,7 @@ public class MapSample extends CollectionSample implements PropertyChangeListene
 				times[1] += System.nanoTime() - startingTime;
 
 				startingTime = System.nanoTime();
-				iterator = treeMap.keySet().iterator();
+				iterator = concurrentHashMap.keySet().iterator();
 				while (iterator.hasNext()) {
 					iterator.next();
 				}
