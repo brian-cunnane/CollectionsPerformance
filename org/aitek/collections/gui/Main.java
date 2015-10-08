@@ -53,13 +53,13 @@ public class Main extends JFrame implements ActionListener, ChangeListener {
 		tabbedPane.addChangeListener(this);
 		add(tabbedPane);
 
-		StatsPanel listPanel = new StatsPanel("List", new String[] { "ArrayList", "LinkedList", "Vector", "Stack" });
+		StatsPanel listPanel = new StatsPanel("List", new String[] { "ArrayList", "LinkedList", "CopyOnWriteArrayList", "Stack" });
 		SpringLayout slList = new SpringLayout();
 		listPanel.setLayout(slList);
 		tabbedPane.addTab("    List    ", null, listPanel, "List Performances");
 		listSample = new ListSample(listPanel, this);
 
-		StatsPanel setPanel = new StatsPanel("Set", new String[] { " CopyOnWriteArraySet", "concurrentSkipListSet", "TreeSet" });
+		StatsPanel setPanel = new StatsPanel("Set", new String[] { " CopyOnWriteArraySet", "ConcurrentSkipListSet", "TreeSet" });
 		SpringLayout slSet = new SpringLayout();
 		setPanel.setLayout(slSet);
 		tabbedPane.addTab("    Set    ", null, setPanel, "Set Performances");

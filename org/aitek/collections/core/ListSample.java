@@ -3,6 +3,7 @@ package org.aitek.collections.core;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.management.relation.RoleList;
 import javax.swing.SwingWorker;
@@ -15,7 +16,7 @@ public class ListSample extends CollectionSample implements PropertyChangeListen
 
 	private ArrayList<Integer> arrayList;
 	private LinkedList<Integer> linkedList;
-	private Vector<Integer> vector;
+	private CopyOnWriteArrayList<Integer> copyOnWriteArrayList;
 	private Stack<Integer> stack;
 	private RoleList rl;
 	private long[] times;
@@ -28,7 +29,7 @@ public class ListSample extends CollectionSample implements PropertyChangeListen
 		times = new long[COLLECTION_TYPES];
 		arrayList = new ArrayList<Integer>(Constants.COLLECTION_MAX_SIZE * 1000);
 		linkedList = new LinkedList<Integer>();
-		vector = new Vector<Integer>(Constants.COLLECTION_MAX_SIZE * 1000);
+		copyOnWriteArrayList = new CopyOnWriteArrayList<Integer>();
 		stack = new Stack<Integer>();
 		rl = new RoleList(50000);
 
@@ -130,7 +131,7 @@ public class ListSample extends CollectionSample implements PropertyChangeListen
 
 			long times[] = new long[COLLECTION_TYPES];
 			arrayList.clear();
-			vector.clear();
+			copyOnWriteArrayList.clear();
 			linkedList.clear();
 			stack.clear();
 
@@ -153,7 +154,7 @@ public class ListSample extends CollectionSample implements PropertyChangeListen
 
 			startingTime = System.nanoTime();
 			for (int j = 0; j < getListSize(); j++) {
-				vector.add(toBeInserted[j]);
+				copyOnWriteArrayList.add(toBeInserted[j]);
 			}
 			times[2] += System.nanoTime() - startingTime;
 
@@ -186,7 +187,7 @@ public class ListSample extends CollectionSample implements PropertyChangeListen
 
 				startingTime = System.nanoTime();
 				for (int j = 0; j < 50; j++)
-					vector.add(vector.size() / 2, 0);
+					copyOnWriteArrayList.add(copyOnWriteArrayList.size() / 2, 0);
 				times[2] += System.nanoTime() - startingTime;
 
 				startingTime = System.nanoTime();
@@ -231,11 +232,11 @@ public class ListSample extends CollectionSample implements PropertyChangeListen
 
 				startingTime = System.nanoTime();
 				for (int j = 0; j < 10; j++)
-					vector.remove(0);
+					copyOnWriteArrayList.remove(0);
 				for (int j = 0; j < 10; j++)
-					vector.remove(vector.size() / 2);
+					copyOnWriteArrayList.remove(copyOnWriteArrayList.size() / 2);
 				for (int j = 0; j < 10; j++)
-					vector.remove(vector.size()-1);
+					copyOnWriteArrayList.remove(copyOnWriteArrayList.size()-1);
 				times[2] += System.nanoTime() - startingTime;
 
 				startingTime = System.nanoTime();
@@ -282,9 +283,9 @@ public class ListSample extends CollectionSample implements PropertyChangeListen
 
 				startingTime = System.nanoTime();
 				for (int j = 0; j < 10; j++) {
-					vector.get(0);
-					vector.get(vector.size() / 2);
-					vector.get(vector.size() - 1);
+					copyOnWriteArrayList.get(0);
+					copyOnWriteArrayList.get(copyOnWriteArrayList.size() / 2);
+					copyOnWriteArrayList.get(copyOnWriteArrayList.size() - 1);
 				}
 				times[2] += System.nanoTime() - startingTime;
 
@@ -324,7 +325,7 @@ public class ListSample extends CollectionSample implements PropertyChangeListen
 				times[1] += System.nanoTime() - startingTime;
 
 				startingTime = System.nanoTime();
-				Collections.sort(vector);
+				Collections.sort(copyOnWriteArrayList);
 				times[2] += System.nanoTime() - startingTime;
 
 				startingTime = System.nanoTime();
@@ -363,7 +364,7 @@ public class ListSample extends CollectionSample implements PropertyChangeListen
 				times[1] += System.nanoTime() - startingTime;
 
 				startingTime = System.nanoTime();
-				iterator = vector.iterator();
+				iterator = copyOnWriteArrayList.iterator();
 				while (iterator.hasNext()) {
 					iterator.next();
 				}
@@ -393,7 +394,7 @@ public class ListSample extends CollectionSample implements PropertyChangeListen
 	@Override
 	public boolean isPopulated() {
 
-		return vector.size() > 0;
+		return copyOnWriteArrayList.size() > 0;
 	}
 
 }
