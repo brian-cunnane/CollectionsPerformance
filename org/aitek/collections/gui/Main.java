@@ -65,7 +65,7 @@ public class Main extends JFrame implements ActionListener, ChangeListener {
 		tabbedPane.addTab("    Set    ", null, setPanel, "Set Performances");
 		setSample = new SetSample(setPanel, this);
 
-		StatsPanel mapPanel = new StatsPanel("Map", new String[] { "Hashtable", "IdentityHashMap", "WeakHashMap", "TreeMap" });
+		StatsPanel mapPanel = new StatsPanel("Map", new String[] { "Hashtable", "IdentityHashMap", "WeakHashMap", "ConcurrentHashMap" });
 		SpringLayout slMap = new SpringLayout();
 		mapPanel.setLayout(slMap);
 		tabbedPane.addTab("    Map    ", null, mapPanel, "Map Performances");
